@@ -1,0 +1,81 @@
+<html>
+  <head>
+    <title>RSS Dashboard</title>
+    <style>
+      th,td {
+        text-align: left;
+      }
+      input[type=text] {
+        display: none;
+      }
+      table {
+        width: 100%;
+      }
+      form {
+        display: inline;
+      }
+    </style>
+  </head>
+  <body>
+    <table>
+      <tr>
+        <th>title</th>
+        <th>url_args</th>
+        <th>N/S/F</th>
+        <th>next_update_time</th>
+        <th>status</th>
+        <th>link</th>
+        <th></th>
+      </tr>{% for db in dbs %}<tr>
+        <td>{{db.channel.title}}</td>
+        <td>{{db.url_args}}</td>
+        <td>{{db.update_status_chunk.no_updates}}/{{db.update_status_chunk.small_no_updates}}/{{db.update_status_chunk.failures}}</td>
+        <td>{{db.next_update_time}}
+          <form method="get">
+            <input type='text' name='rss_name' value='{{db.rss_name}}'>
+            <input type='text' name='url_args' value='{{db.url_args}}'>
+            <input type='text' name='action' value='check_update'>
+            <input type='submit' value='检查更新'/>
+          </form>
+          <form method="get">
+            <input type='text' name='rss_name' value='{{db.rss_name}}'>
+            <input type='text' name='url_args' value='{{db.url_args}}'>
+            <input type='text' name='action' value='update'>
+            <input type='submit' value='更新'/>
+          </form>
+          <form method="get">
+            <input type='text' name='rss_name' value='{{db.rss_name}}'>
+            <input type='text' name='url_args' value='{{db.url_args}}'>
+            <input type='text' name='action' value='push'>
+            <input type='submit' value='推送'/>
+          </form>
+        </td>
+        <td>{{db.status}}
+          <form method="get">
+            <input type='text' name='rss_name' value='{{db.rss_name}}'>
+            <input type='text' name='url_args' value='{{db.url_args}}'>
+            <input type='text' name='action' value='set_status'>
+            <select name='status'>
+              <option value='Enabled'>Enabled</option>
+              <option value='Paused'>Paused</option>
+              <option value='Disabled'>Disabled</option>
+            </select>
+            <input type='submit' value='设置状态'/>
+          </form>
+        </td>
+        <td>
+          {% set url_args = json.loads(db.url_args) %}<a href='{{url_for(".get_rss_from_url", rss_name=db.rss_name, **url_args)}}'>链接</a>
+        </td>
+        <td>
+          <form method="get">
+            <input type='text' name='rss_name' value='{{db.rss_name}}'>
+            <input type='text' name='url_args' value='{{db.url_args}}'>
+            <input type='text' name='action' value='delete'>
+            <input type='submit' value='删除'/>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </body>
+</html>

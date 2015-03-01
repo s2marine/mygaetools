@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <atom:link rel="hub" href="https://pubsubhubbub.appspot.com/" />
+  <title>{{rss_obj.db.channel.title}}</title>
+  <link>{{rss_obj.db.channel.link}}</link>
+  <description>{{rss_obj.db.channel.description}}</description>
+  {% for item in rss_obj.db.items -%}
+  <item>
+    <title>{{item.title}}</title>
+    <link>{{item.link}}</link>
+    <description>{{item.description}}</description>
+    <guid{% if not rss_obj.guid_is_link %} isPermaLink="false"{% endif %}>{{item.guid}}</guid>
+    <pubDate>{{item.pub_date.strftime('%a, %d %b %Y %H:%M:%S +0800')}}</pubDate>
+  </item>
+  {%- endfor %}
+</channel>
+</rss>

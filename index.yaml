@@ -1,0 +1,6 @@
+indexes:
+
+- kind: DBRSS
+  properties:
+  - name: rss_name
+  - name: url_args

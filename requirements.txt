@@ -1,0 +1,6 @@
+flask
+requests
+BeautifulSoup4
+html5lib
+chardet
+enum34

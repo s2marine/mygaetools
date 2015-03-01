@@ -1,0 +1,5 @@
+# -*- encoding:utf-8 -*-
+bilibili_appkey = '' # your Bilibili appkey
+bilibili_headers = {
+    'Cookie': '', # your Bilibili cookie document.cookie after login 
+}

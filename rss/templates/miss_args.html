@@ -1,0 +1,15 @@
+<html>
+  <head>
+    <title>Miss Args</title>
+  </head>
+  <body>
+    miss args:<br/>
+    {%- for arg,msg in miss_args.items() -%}
+      {{arg}}, {{msg}}<br/>
+    {%- endfor -%}
+    optional args:<br/>
+    {%- for arg,msg in optional_args.items() -%}
+      {{arg}}, {{msg}}<br/>
+    {%- endfor -%}
+  </body>
+</html>

@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <title>add rss</title>
+    <style>
+      th,td {
+        text-align: left;
+      }
+      table {
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <table>
+      <tr>
+        <th>rss_name</th>
+        <th>need_args</th>
+        <th>optional_args</th>
+      </tr>
+      {%- for rss in rss_templates -%}
+      <tr>
+        <td>{{rss.rss_name}}</td>
+        <td>
+          {%- for k,v in rss.need_args.items() -%}
+            {{k}}: {{v}}<br/>
+          {%- endfor -%}
+        </td>
+        <td>
+          {%- for k,v in rss.optional_args.items() -%}
+            {{k}}: {{v}}<br/>
+          {%- endfor -%}
+        </td>
+      </tr>
+      {%- endfor -%}
+    </table>
+  </body>
+</html>
