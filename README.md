@@ -10,7 +10,7 @@ Some tools run on Google App Engine
 ### 3. Add you own appid
     $ cp app.yaml.template app.yaml
     $ vim app.yaml
-### 3. Upload to GAE
+### 4. Upload to GAE
     $ make upload
 
 ## Read More
