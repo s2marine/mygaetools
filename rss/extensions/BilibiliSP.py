@@ -35,6 +35,7 @@ class BilibiliSP(RSSObject):
     def apply_pre_process(self):
         if self.pre_process_args['isbangumi']:
             self.update_interval = parse_timedelta('7d')
+            self.no_update_limit = 2
             self.small_update_interval = parse_timedelta('30m')
             self.small_no_update_limit = 24*2
 
