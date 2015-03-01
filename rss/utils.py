@@ -26,7 +26,7 @@ def parse_timedelta(time_str):
     return timedelta(**time_params)
 
 def get_align_datetime(dt):
-    minutes2add = (dt.minute//15)*15
+    minutes2add = ((dt.minute//15) + 1) * 15
     delta = timedelta(minutes=minutes2add) - \
             timedelta(minutes=dt.minute, seconds=dt.second, microseconds=dt.microsecond)
     return dt + delta

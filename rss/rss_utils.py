@@ -204,14 +204,12 @@ class RSSObject(object):
                 chunk.no_updates += 1
                 next_update_type = RSSFlag.NEXT_UPDATE
             else:
-                self.mail()
                 next_update_type = RSSFlag.NEXT_PAUSE
         elif update_result == RSSFlag.UPDATE_FAILED:
             if chunk.failures < self.failures_limit:
                 chunk.failures += 1
                 next_update_type = RSSFlag.NEXT_FAILED
             else:
-                self.mail()
                 next_update_type = RSSFlag.NEXT_PAUSE
         logging.debug('update_result, next_update_type: %s, %s' % (update_result, next_update_type))
         return next_update_type
@@ -220,7 +218,9 @@ class RSSObject(object):
         last_update = self.get_last_update_time()
         if update_type == RSSFlag.NEXT_UPDATE:
             if isinstance(self.update_interval, timedelta):
-                next_update_time = last_update + self.update_interval
+                next_update_time = last_update
+                while next_update_time < self.time_now:
+                    next_update_time += self.update_interval
             elif isinstance(self.update_interval, list):
                 today = date.today()
                 today_time = datetime.combine(today, time())
@@ -241,7 +241,8 @@ class RSSObject(object):
         elif update_type == RSSFlag.NEXT_PAUSE:
             self.db.status = RSSFlag.STATUS_PAUSED.value
             self.mail(RSSFlag.REASON_RSSPAUSED)
-        self.db.next_update_time = get_align_datetime(next_update_time)
+        if update_type != RSSFlag.NEXT_PAUSE:
+            self.db.next_update_time = get_align_datetime(next_update_time)
 
     def get_last_update_time(self):
         return self.time_now
