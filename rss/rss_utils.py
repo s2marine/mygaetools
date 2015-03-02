@@ -237,7 +237,7 @@ class RSSObject(object):
             next_update_time = self.time_now + self.small_update_interval
         elif update_type == RSSFlag.NEXT_FAILED:
             db.next_update_time = self.time_now + \
-                    self.check_failed_interval(self.db.rss_update_status_chunk.failures)
+                    self.check_failed_interval(self.db.update_status_chunk.failures)
         elif update_type == RSSFlag.NEXT_PAUSE:
             self.db.status = RSSFlag.STATUS_PAUSED.value
             self.mail(RSSFlag.REASON_RSSPAUSED)
