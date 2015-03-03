@@ -15,6 +15,7 @@ from bs4 import BeautifulSoup
 class Jandan(RSSObject):
     rss_name = 'Jandan'
     guid_is_link = False
+    max_item = 25
     update_interval = parse_timedelta('30m')
 
 
