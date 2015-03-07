@@ -35,13 +35,12 @@ def add_rss():
 
 @rss.route('/_admin/')
 def admin():
-    if not islocal:
-        if not users.get_current_user():
-            logging.debug('not users.get_current_user')
-            return redirect(users.create_login_url())
-        elif not users.is_current_user_admin():
-            logging.debug('not users.is_current_user_admin')
-            return redirect(url_for('.add_rss'))
+    if not users.get_current_user():
+        logging.debug('not users.get_current_user')
+        return redirect(users.create_login_url(request.url))
+    elif not users.is_current_user_admin():
+        logging.debug('not users.is_current_user_admin')
+        return redirect(url_for('.add_rss'))
     set_deadline()
     url_args = request.args.to_dict()
     logging.debug(u'view web: admin, args: %s' % url_args)
