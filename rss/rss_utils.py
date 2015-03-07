@@ -93,7 +93,7 @@ class RSSObject(object):
     no_update_limit = float('inf')
     small_update_interval = parse_timedelta('0s')
     small_no_update_limit = 0
-    check_failed_interval = lambda x: x*parse_timedelta('15m')
+    check_failed_interval = lambda self,x: x*parse_timedelta('15m')
     failures_limit = 10
 
     def __init__(self, args):
