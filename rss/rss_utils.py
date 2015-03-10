@@ -273,13 +273,14 @@ class RSSObject(object):
         pass
 
     def push(self):
-        if islocal:
-            return
-        hub_url = url_for('rss.get_rss_from_url', rss_name=self.rss_name, _external=True, **self.url_args)
+        hub_url = url_for('rss.get_rss_from_url', rss_name=self.rss_name, _scheme='https', _external=True, **self.url_args)
         push_url = 'https://pubsubhubbub.appspot.com/'
         data = urllib.urlencode({
             'hub.url': hub_url,
             'hub.mode': 'publish'})
+        if islocal:
+            logging.debug('push %s: %s' % (self.rss_name, hub_url))
+            return
         response = urlfetch.fetch(push_url, data, urlfetch.POST)
         logging.debug('push %s: %s, response %s' % (self.rss_name, hub_url, response.status_code))
 
