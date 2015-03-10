@@ -1,4 +1,4 @@
-# s2marine-gaetools
+# mygaetools
 Some tools run on Google App Engine
 
 ## How to use
