@@ -1,4 +1,4 @@
 cron:
 - description: RSS Cron Update
   url: /RSS/cron_update
-  schedule: every 15 minutes from 00:01 to 23:59
+  schedule: every 15 minutes from 00:00 to 23:59
