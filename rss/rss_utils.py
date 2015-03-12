@@ -223,7 +223,7 @@ class RSSObject(object):
                 while next_update_time < self.time_now:
                     next_update_time += self.update_interval
             elif isinstance(self.update_interval, list):
-                today = date.today()
+                today = self.time_now.date()
                 today_time = datetime.combine(today, time())
                 delta = None
                 for _d in self.update_interval:
