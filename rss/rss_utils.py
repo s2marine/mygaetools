@@ -15,7 +15,7 @@ from utils import parse_timedelta, get_align_datetime, islocal
 from datetime import timedelta, datetime, date, time
 import urllib
 from enum import Enum
-from urllib import unquote
+from urllib import unquote_plus
 
 class DBRSSChannel(ndb.Model):
     title = ndb.StringProperty(indexed=False)
@@ -275,7 +275,7 @@ class RSSObject(object):
 
     def push(self):
         hub_url = url_for('rss.get_rss_from_url', rss_name=self.rss_name, _scheme='https', _external=True, **self.url_args)
-        hub_url = unquote(hub_url)
+        hub_url = unquote_plus(hub_url)
         # I try to showing url clearly but I don't know if it's right for RFC.
         # 'http://localhost/%E6%AF%94%E5%A6%82%E8%BF%99%E4%B8%AA' -> 'http://localhost/比如这个'
         # If I do it wrong please tell me.
