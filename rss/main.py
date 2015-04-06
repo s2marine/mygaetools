@@ -64,6 +64,9 @@ def admin():
         elif url_args['action'] == 'push':
             o.push()
             return redirect(url_for('.admin'))
+        elif url_args['action'] == 'reset':
+            o.reset()
+            return redirect(url_for('.admin'))
 
 
 @rss.route('/<rss_name>')

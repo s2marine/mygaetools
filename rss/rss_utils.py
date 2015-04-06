@@ -326,3 +326,11 @@ class RSSObject(object):
             self.add_into_mem()
         if update_result == RSSFlag.UPDATE_SUCCESS:
             self.push()
+
+    def reset(self):
+        logging.debug('before reset %s %s' % (self.db.pre_process_args, self.db.channel))
+        self.pre_process()
+        self.fetch_channel()
+        logging.debug('after reset %s %s' % (self.db.pre_process_args, self.db.channel))
+        self.db.put()
+        self.add_into_mem()
