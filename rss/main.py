@@ -2,10 +2,12 @@
 import sys
 'lib' in sys.path or sys.path.append('lib')
 import logging
+
+from google.appengine.ext import ndb
 from google.appengine.api import users
 
 from flask import Blueprint, render_template, url_for, request, redirect, Response
-from rss_utils import RSSHelper, DBRSS
+from rss_utils import RSSHelper, DBRSS, RSSFlag
 from utils import set_deadline, islocal
 
 from datetime import datetime
@@ -87,7 +89,7 @@ def get_rss_from_url(rss_name):
 @rss.route('/cron_update')
 def cron_update():
     set_deadline()
-    dbs=DBRSS.query().fetch()
+    dbs=DBRSS.query().filter(ndb.GenericProperty('status') == RSSFlag.STATUS_ENABLED.value).fetch()
     for db in dbs:
         rss_helper = RSSHelper(db.rss_name)
         o = rss_helper.get_class()(db)
