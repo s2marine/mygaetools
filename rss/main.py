@@ -89,7 +89,7 @@ def get_rss_from_url(rss_name):
 @rss.route('/cron_update')
 def cron_update():
     set_deadline()
-    dbs=DBRSS.query().filter(ndb.GenericProperty('status') == RSSFlag.STATUS_ENABLED.value).fetch()
+    dbs=DBRSS.query(DBRSS.status == RSSFlag.STATUS_ENABLED.value).fetch()
     for db in dbs:
         rss_helper = RSSHelper(db.rss_name)
         o = rss_helper.get_class()(db)

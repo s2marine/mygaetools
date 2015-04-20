@@ -4,3 +4,4 @@ indexes:
   properties:
   - name: rss_name
   - name: url_args
+  - name: status

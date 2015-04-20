@@ -44,7 +44,7 @@ class DBRSS(ndb.Model):
 
     update_status_chunk = ndb.LocalStructuredProperty(DBRSSUpdateStatusChunk, indexed=False)
     next_update_time = ndb.DateTimeProperty(indexed=False)
-    status = ndb.StringProperty(indexed=False)
+    status = ndb.StringProperty(indexed=True)
 
     channel = ndb.LocalStructuredProperty(DBRSSChannel, indexed=False)
     items = ndb.LocalStructuredProperty(DBRSSItem, indexed=False, repeated=True)
