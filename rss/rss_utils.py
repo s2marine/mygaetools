@@ -263,7 +263,7 @@ class RSSObject(object):
         return memcache.delete(self.rss_name+':'+self.url_args_str)
 
     def istime(self):
-        logging.debug('istime check: %s next: %s, now: %s' % (self.rss_name, self.db.next_update_time, self.time_now))
+        logging.debug('istime check: %s %s next: %s, now: %s' % (self.rss_name, self.url_args_str, self.db.next_update_time, self.time_now))
         return self.db.next_update_time <= self.time_now
 
     @property
@@ -282,7 +282,7 @@ class RSSObject(object):
         push_url = 'https://pubsubhubbub.appspot.com/'
         data = urllib.urlencode({
             'hub.url': hub_url,
-            'hub.mode': 'publish'})
+            'hub.mode': 'publish'}).replace('+', '%20')
         if islocal:
             logging.debug('push %s: %s' % (self.rss_name, hub_url))
             return

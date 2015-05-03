@@ -80,8 +80,11 @@ def get_rss_from_url(rss_name):
     if o.miss_args:
         logging.debug(u'miss args: %s' % (o.miss_args))
         return render_template('miss_args.html', miss_args=o.miss_args, optional_args=o.optional_args)
-    elif url_for('.get_rss_from_url', rss_name=rss_name, **o.url_args) != url_for('.get_rss_from_url', rss_name=rss_name, **request.args):
-        return redirect(url_for('.get_rss_from_url', rss_name=rss_name, **o.url_args))
+    elif cmp(o.url_args.keys(), request.args.keys()) or \
+            url_for('.get_rss_from_url', rss_name=rss_name, _external=True, **o.url_args).replace('+', ' ') != request.url:
+        logging.debug(request.url)
+        logging.debug(url_for('.get_rss_from_url', rss_name=rss_name, _external=True, **o.url_args).replace('+', ' '))
+        return redirect(url_for('.get_rss_from_url', rss_name=rss_name, **o.url_args).replace('+', ' '))
     o.get_rss()
     return Response(render_template('rss.html', rss_obj=o), mimetype='application/xml')
 

@@ -70,7 +70,7 @@
           </form>
         </td>
         <td>
-          {% set url_args = json.loads(db.url_args) %}<a href='{{url_for(".get_rss_from_url", rss_name=db.rss_name, **url_args)}}'>链接</a>
+          {% set url_args = json.loads(db.url_args) %}<a href='{{url_for(".get_rss_from_url", rss_name=db.rss_name, **url_args).replace("+", " ")}}'>链接</a>
         </td>
         <td>
           <form method="get">
