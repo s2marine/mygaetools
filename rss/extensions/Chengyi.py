@@ -105,6 +105,11 @@ class Chengyi(RSSObject):
 
     #体育教研部
     def site4_items(self):
+        def get_pub_date(link):
+            soup = BeautifulSoup(requests.get(link).content)
+            td = soup.find('td', attrs={'class':'padding_top'})
+            pub_date_str = re.search('\d+-\d+-\d+', td.text).group()
+            return datetime.strptime(pub_date_str, '%Y-%m-%d')
         result = []
         url = u'http://cytyjys.jmu.edu.cn/s/221/t/1190/p/12/list.htm'
         soup = BeautifulSoup(requests.get(url).content)
@@ -114,7 +119,7 @@ class Chengyi(RSSObject):
             link = 'http://cytyjys.jmu.edu.cn'+i.find('a')['href']
             description = ''
             guid = link
-            pub_date = self.time_now
+            pub_date = get_pub_date(link)
             result.append(DBRSSItem(
                 title = title,
                 link = link,
