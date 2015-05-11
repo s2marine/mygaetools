@@ -80,7 +80,7 @@ class BilibiliSP(RSSObject):
 
     def get_last_update_time(self):
         if self.pre_process_args['isbangumi']:
-            logging.debug('%s, %s' % (self.db.items[0].title, self.db.items[0].pub_date))
+            logging.debug('last item: %s, %s' % (self.db.items[0].title, self.db.items[0].pub_date))
             return self.db.items[0].pub_date
         else:
             return self.time_now

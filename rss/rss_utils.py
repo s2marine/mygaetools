@@ -43,7 +43,7 @@ class DBRSS(ndb.Model):
     pre_process_args = ndb.StringProperty(indexed=False)
 
     update_status_chunk = ndb.LocalStructuredProperty(DBRSSUpdateStatusChunk, indexed=False)
-    next_update_time = ndb.DateTimeProperty(indexed=False)
+    next_update_time = ndb.DateTimeProperty(indexed=True)
     status = ndb.StringProperty(indexed=True)
 
     channel = ndb.LocalStructuredProperty(DBRSSChannel, indexed=False)
@@ -275,19 +275,19 @@ class RSSObject(object):
 
     def push(self):
         hub_url = url_for('rss.get_rss_from_url', rss_name=self.rss_name, _scheme='https', _external=True, **self.url_args)
-        hub_url = unquote_plus(hub_url)
+        hub_url = unquote_plus(hub_url).replace(' ', '%20')
         # I try to showing url clearly but I don't know if it's right for RFC.
         # 'http://localhost/%E6%AF%94%E5%A6%82%E8%BF%99%E4%B8%AA' -> 'http://localhost/比如这个'
         # If I do it wrong please tell me.
         push_url = 'https://pubsubhubbub.appspot.com/'
         data = urllib.urlencode({
             'hub.url': hub_url,
-            'hub.mode': 'publish'}).replace('+', '%20')
+            'hub.mode': 'publish'})
         if islocal:
-            logging.debug('push %s: %s' % (self.rss_name, hub_url))
+            logging.debug('push %s: %s, data: %s' % (self.rss_name, hub_url, data))
             return
         response = urlfetch.fetch(push_url, data, urlfetch.POST)
-        logging.debug('push %s: %s, response %s' % (self.rss_name, hub_url, response.status_code))
+        logging.debug('push %s: %s, data: %s, response %s' % (self.rss_name, hub_url, data, response.status_code))
 
     def get_rss(self):
         self.check_pre_process()

@@ -5,3 +5,8 @@ indexes:
   - name: rss_name
   - name: url_args
   - name: status
+
+- kind: DBRSS
+  properties:
+  - name: status
+  - name: next_update_time

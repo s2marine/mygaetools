@@ -27,7 +27,7 @@ class BilibiliSpace(RSSObject):
     def fetch_channel(self):
         channel = self.db.channel
         pre_process_args = self.pre_process_args
-        channel_url = 'http://api.bilibili.cn/userinfo?mid=%(mid)s&type=%(type)s' \
+        channel_url = 'http://api.bilibili.com/userinfo?mid=%(mid)s&type=%(type)s' \
                 % {'mid':pre_process_args['mid'], 'type':'json'}
         j = requests.get(channel_url).json()
         channel.title = j['name']
