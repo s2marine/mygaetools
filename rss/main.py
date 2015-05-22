@@ -98,3 +98,15 @@ def cron_update():
         o = rss_helper.get_class()(db)
         o.check_update()
     return ''
+
+@rss.route('/subscriber', methods=['GET', 'POST'])
+def subscriber():
+    set_deadline()
+    logging.debug(str(request.args.to_dict()))
+    if 'hub.challenge' in request.args.to_dict():
+        logging.debug('subscribe')
+        return request.args.to_dict()['hub.challenge']
+    if request.method == 'POST':
+        logging.debug('POST: %s, %s' % (request.form.to_dict(), request.data))
+        return ''
+    return ''
