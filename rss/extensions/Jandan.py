@@ -31,6 +31,7 @@ class Jandan(RSSObject):
         authors = BeautifulSoup(src, 'html5lib').find('div', attrs={'id':'list-pic'}).find_all('div', attrs={'class':'acv_author'})
         
         old_guids = [i.guid for i in self.db.items]
+        offset = 0
         for author in authors[:self.max_item]:
             title = author.text.strip().replace('\n', '').replace('\t', '')
             guid = str(int(re.search('(?<=comment-)\d+$', author.find('a')['href']).group()))
@@ -53,7 +54,8 @@ class Jandan(RSSObject):
                     tmp.contents.append(i)
             [tmp.contents.insert(i*2+1, BeautifulSoup().new_tag('br')) for i in range(len(tmp.contents))]
             description = str(tmp.encode_contents())
-            pub_date = self.time_now
+            pub_date = self.time_now + timedelta(seconds=offset)
+            offset += 1
             yield DBRSSItem(
                 title = title,
                 link = link,
