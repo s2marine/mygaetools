@@ -8,7 +8,7 @@ from rss_utils import RSSObject, DBRSSItem
 from utils import parse_timedelta
 import requests
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 import re
 from bs4 import BeautifulSoup
 
@@ -37,7 +37,7 @@ class Jandan(RSSObject):
             guid = str(int(re.search('(?<=comment-)\d+$', author.find('a')['href']).group()))
             if guid in old_guids:
                 continue
-            link = author.find_all('a')[1].get('href')
+            link = author.find_all('a')[0].get('href')
             tmp = BeautifulSoup().new_tag('tmp')
             for p in author.find_next('div', attrs={'class':'acv_comment'}).find_all('p'):
                 for i in p:
