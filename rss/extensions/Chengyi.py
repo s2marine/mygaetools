@@ -39,7 +39,7 @@ class Chengyi(RSSObject):
     def site1_items(self):
         result = []
         url = 'http://cyjwb.jmu.edu.cn/lists.asp?lbm=%CD%A8%D6%AA%B9%AB%B8%E6'
-        soup = BeautifulSoup(requests.get(url).content)
+        soup = BeautifulSoup(requests.get(url).content, 'html5lib')
         table = soup.findAll('table')[2]
         p = re.compile(u'\d+-\d+-\d+ \d+:\d+:\d+')
         for i in table.findAll('a')[:-3]: #去掉最后的翻页
@@ -62,7 +62,7 @@ class Chengyi(RSSObject):
     def site2_items(self):
         result = []
         url = 'http://cyjwb.jmu.edu.cn/lists.asp?lbm=%BF%BC%CA%D4%B0%B2%C5%C5'
-        soup = BeautifulSoup(requests.get(url).content)
+        soup = BeautifulSoup(requests.get(url).content, 'html5lib')
         table = soup.findAll('table')[2]
         p = re.compile(u'\d+-\d+-\d+ \d+:\d+:\d+')
         for i in table.findAll('a')[:-3]: #去掉最后的翻页
@@ -85,7 +85,7 @@ class Chengyi(RSSObject):
     def site3_items(self):
         result = []
         url = u'http://chengyi.jmu.edu.cn/s/206/t/1129/p/1/c/4737/d/4752/list.htm'
-        soup = BeautifulSoup(requests.get(url).content)
+        soup = BeautifulSoup(requests.get(url).content, 'html5lib')
         table = soup.find('div', attrs={'id':'newslist'}).find('table')
         for stable in table.findAll('table'):
             title = stable.a.text.strip()
@@ -106,13 +106,13 @@ class Chengyi(RSSObject):
     #体育教研部
     def site4_items(self):
         def get_pub_date(link):
-            soup = BeautifulSoup(requests.get(link).content)
+            soup = BeautifulSoup(requests.get(link).content, 'html5lib')
             td = soup.find('td', attrs={'class':'padding_top'})
             pub_date_str = re.search('\d+-\d+-\d+', td.text).group()
             return datetime.strptime(pub_date_str, '%Y-%m-%d')
         result = []
         url = u'http://cytyjys.jmu.edu.cn/s/221/t/1190/p/12/list.htm'
-        soup = BeautifulSoup(requests.get(url).content)
+        soup = BeautifulSoup(requests.get(url).content, 'html5lib')
         tables = soup.findAll('table', attrs={'class':'columnStyle'})
         for i in tables:
             title = i.find('font').text
