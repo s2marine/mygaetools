@@ -34,8 +34,8 @@ class BilibiliSP(RSSObject):
                 result['isbangumi'] = int(re.search('var isbangumi ?= ?"(\d+?)"', src).group(1))
         elif '/bangumi/' in self.pre_process_args['url']:
             src = requests.get(self.pre_process_args['url']).content
-            href = BeautifulSoup(src).find('div', {'id':'episode_list'}).find('a').['href']
-            aid = re.search('\d+', a.get('href')).group(0)
+            href = BeautifulSoup(src, 'html5lib').find('div', {'id':'episode_list'}).find('a')['href']
+            aid = re.search('\d+', href).group(0)
             video_detail_url = 'http://api.bilibili.com/view?id=%(id)s&appkey=%(appkey)s&type=json'
             url = video_detail_url % {'id':aid, 'appkey':self.appkey}
             video_detail = requests.get(url, headers=self.headers).json()
