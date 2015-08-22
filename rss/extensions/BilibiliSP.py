@@ -9,6 +9,7 @@ import config
 from rss_utils import RSSObject, DBRSSItem
 from utils import parse_timedelta
 import requests
+from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 import re
 
@@ -26,10 +27,20 @@ class BilibiliSP(RSSObject):
 
     def get_pre_process_args(self):
         result = {}
-        src = requests.get(self.pre_process_args['url']).content
-        result['spid'] = re.search('var spid ?= ?"(\d+?)"', src).group(1)
-        if 'isbangumi' not in self.pre_process_args:
-            result['isbangumi'] = int(re.search('var isbangumi ?= ?"(\d+?)"', src).group(1))
+        if '/sp/' in self.pre_process_args['url']:
+            src = requests.get(self.pre_process_args['url']).content
+            result['spid'] = re.search('var spid ?= ?"(\d+?)"', src).group(1)
+            if 'isbangumi' not in self.pre_process_args:
+                result['isbangumi'] = int(re.search('var isbangumi ?= ?"(\d+?)"', src).group(1))
+        elif '/bangumi/' in self.pre_process_args['url']:
+            src = requests.get(self.pre_process_args['url']).content
+            href = BeautifulSoup(src).find('div', {'id':'episode_list'}).find('a').['href']
+            aid = re.search('\d+', a.get('href')).group(0)
+            video_detail_url = 'http://api.bilibili.com/view?id=%(id)s&appkey=%(appkey)s&type=json'
+            url = video_detail_url % {'id':aid, 'appkey':self.appkey}
+            video_detail = requests.get(url, headers=self.headers).json()
+            result['spid'] = video_detail['spid']
+            result['isbangumi'] = 1 if 'bangumi' in video_detail else 0
         return result
 
     def apply_pre_process(self):
