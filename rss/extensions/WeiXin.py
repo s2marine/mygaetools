@@ -18,7 +18,7 @@ import json
 import lxml.html, lxml.etree
 
 class WeiXin(RSSObject):
-    rss_name = 'Weixin'
+    rss_name = 'WeiXin'
     guid_is_link = False
     needed_args = {
         'openid': 'which person you wanna fetch',
