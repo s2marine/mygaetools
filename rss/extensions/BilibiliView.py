@@ -56,7 +56,7 @@ class BilibiliView(RSSObject):
             video_detail = requests.get(url, headers=self.headers).json()
             title = video_detail['partname']
             description = '<img src="'+video_detail['pic']+'"/><br/>'+video_detail['description']
-            pub_date = datetime.fromtimestamp(video_detail['created'])+timedelta(hours=8)
+            pub_date = self.time_now
 
             yield DBRSSItem(
                 title = title,
