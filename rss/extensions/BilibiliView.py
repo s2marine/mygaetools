@@ -10,6 +10,7 @@ from rss_utils import RSSObject, DBRSSItem
 import requests
 from datetime import datetime, timedelta
 import re
+import time
 
 
 class BilibiliView(RSSObject):
@@ -42,9 +43,10 @@ class BilibiliView(RSSObject):
         video_detail_url = 'http://api.bilibili.com/view?id=%(aid)s&appkey=%(appkey)s&type=json&page=%(pages)s'
 
         video_count = requests.get(video_list_url).json()['pages']
-        
+
         old_guids = [i.guid for i in self.db.items]
         for i in range(video_count, max(video_count-self.max_item, 0), -1):
+            time.sleep(1)
             guid = 'http://www.bilibili.com/video/av%(aid)s/index_%(pages)s.html' \
                     % {'aid':pre_process_args['aid'], 'pages': i}
 

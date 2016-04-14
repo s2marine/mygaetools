@@ -12,6 +12,7 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 import re
+import time
 
 class BilibiliSP(RSSObject):
     rss_name = 'BilibiliSP'
@@ -67,14 +68,15 @@ class BilibiliSP(RSSObject):
         video_detail_url = 'http://api.bilibili.com/view?id=%(id)s&appkey=%(appkey)s&type=json'
 
         video_list = requests.get(video_list_url).json()['list']
-        
+
         old_guids = [i.guid for i in self.db.items]
         for i in video_list[:self.max_item]:
+            time.sleep(1)
             guid = aid = str(i['aid'])
             if guid in old_guids:
                 continue
             link = 'http://www.bilibili.com/video/av'+aid+'/'
-            
+
             url = video_detail_url % {'id':i['aid'], 'appkey':self.appkey}
             video_detail = requests.get(url, headers=self.headers).json()
             title = video_detail['title']

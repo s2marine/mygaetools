@@ -10,6 +10,7 @@ from rss_utils import RSSObject, DBRSSItem
 from utils import parse_timedelta
 import requests
 from datetime import datetime, timedelta
+import time
 
 class Bilibili(RSSObject):
     rss_name = 'Bilibili'
@@ -30,9 +31,10 @@ class Bilibili(RSSObject):
         video_detail_url = 'http://api.bilibili.com/view?id=%(id)s&appkey=%(appkey)s&type=json'
 
         hot_list = requests.get(hot_list_url).json()['list']
-        
+
         old_guids = [i.guid for i in self.db.items]
         for i in range(self.max_item):
+            time.sleep(1)
             i = str(i)
             guid = aid = str(hot_list[i]['aid'])
             if guid in old_guids:
