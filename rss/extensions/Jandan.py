@@ -28,7 +28,7 @@ class Jandan(RSSObject):
     def item_yield(self):
         url = 'http://jandan.net/top'
         src = requests.get(url).content
-        lis = BeautifulSoup(src, 'html5lib').find('div', attrs={'id':'recent'}).find_all('li')
+        lis = BeautifulSoup(src, 'html5lib').find('div', attrs={'id':'pic'}).find_all('li')
 
         offset = 0
         old_guids = [i.guid for i in self.db.items]
