@@ -10,6 +10,7 @@ from rss_utils import RSSObject, DBRSSItem
 import requests
 from datetime import datetime, timedelta
 import re
+import time
 
 class BilibiliSpace(RSSObject):
     rss_name = 'BilibiliSpace'
@@ -41,9 +42,10 @@ class BilibiliSpace(RSSObject):
         video_detail_url = 'http://api.bilibili.com/view?id=%(id)s&appkey=%(appkey)s&type=json'
 
         video_list = requests.get(video_list_url).json()['list']
-        
+
         old_guids = [i.guid for i in self.db.items]
         for i in range(min(self.max_item, int(video_list['num']))):
+            time.sleep(1)
             i = str(i)
             guid = aid = str(video_list[i]['aid'])
             if guid in old_guids:
