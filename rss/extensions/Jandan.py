@@ -16,46 +16,39 @@ class Jandan(RSSObject):
     rss_name = 'Jandan'
     guid_is_link = False
     max_item = 25
-    update_interval = parse_timedelta('30m')
+    update_interval = parse_timedelta('2h')
 
 
     def fetch_channel(self):
         channel = self.db.channel
-        channel.title = u'煎蛋24小时最佳评论'
-        channel.link = 'http://jandan.net/'
-        channel.description = u'煎蛋24小时最佳评论'
+        channel.title = u'煎蛋热榜'
+        channel.link = 'http://jandan.net/top'
+        channel.description = u'煎蛋热门内容排行榜'
 
     def item_yield(self):
-        url = 'http://jandan.net/'
+        url = 'http://jandan.net/top'
         src = requests.get(url).content
-        authors = BeautifulSoup(src, 'html5lib').find('div', attrs={'id':'list-pic'}).find_all('div', attrs={'class':'acv_author'})
-        
-        old_guids = [i.guid for i in self.db.items]
+        lis = BeautifulSoup(src, 'html5lib').find('div', attrs={'id':'recent'}).find_all('li')
+
         offset = 0
-        for author in authors[:self.max_item]:
-            title = author.text.strip().replace('\n', '').replace('\t', '')
-            guid = str(int(re.search('(?<=comment-)\d+$', author.find('a')['href']).group()))
+        old_guids = [i.guid for i in self.db.items]
+        for li in lis[:self.max_item]:
+            title = li.find('div', attrs={'class': 'author'}).find('strong').text
+            guid = li['id']
+            link = li.find('div', attrs={'class': 'text'}).find('small').find('a')['href']
             if guid in old_guids:
                 continue
-            link = author.find_all('a')[0].get('href')
-            tmp = BeautifulSoup().new_tag('tmp')
-            for p in author.find_next('div', attrs={'class':'acv_comment'}).find_all('p'):
-                for i in p:
-                    if i.name == 'img':
-                        if i.has_attr('org_src'):
-                            i['src'] = i['org_src']
-                            del i['org_src']
-                        if i.has_attr('onload'):
-                            del i['onload']
-                    elif i.name == 'br':
-                        continue
-                    elif i == u'\n':
-                        continue
-                    tmp.contents.append(i)
-            [tmp.contents.insert(i*2+1, BeautifulSoup().new_tag('br')) for i in range(len(tmp.contents))]
-            description = str(tmp.encode_contents())
+            content = li.find('div', attrs={'class': 'text'}).find('p')
+            for img in content.find_all('img'):
+                if img.name == 'img':
+                    if img.has_attr('org_src'):
+                        img['src'] = img['org_src']
+                        del img['org_src']
+                    if img.has_attr('onload'):
+                        del img['onload']
+            description = content.encode_contents()
             pub_date = self.time_now + timedelta(seconds=offset)
-            offset += 1
+            offset = 1
             yield DBRSSItem(
                 title = title,
                 link = link,
