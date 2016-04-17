@@ -15,7 +15,7 @@ from bs4 import BeautifulSoup
 class Jandan(RSSObject):
     rss_name = 'Jandan'
     guid_is_link = False
-    max_item = 25
+    max_item = 50
     update_interval = parse_timedelta('2h')
 
 
@@ -33,7 +33,9 @@ class Jandan(RSSObject):
         offset = 0
         old_guids = [i.guid for i in self.db.items]
         for li in lis[:self.max_item]:
-            title = li.find('div', attrs={'class': 'author'}).find('strong').text
+            pub_date = self.time_now + timedelta(seconds=offset)
+            offset += 1
+            title = li.find('div', attrs={'class': 'author'}).find('strong').text + ' ' + str(pub_date.strftime('%Y-%m-%d %H:%M:%d'))
             guid = li['id']
             link = li.find('div', attrs={'class': 'text'}).find('small').find('a')['href']
             if guid in old_guids:
@@ -47,8 +49,6 @@ class Jandan(RSSObject):
                     if img.has_attr('onload'):
                         del img['onload']
             description = content.encode_contents()
-            pub_date = self.time_now + timedelta(seconds=offset)
-            offset = 1
             yield DBRSSItem(
                 title = title,
                 link = link,
