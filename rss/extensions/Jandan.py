@@ -40,7 +40,10 @@ class Jandan(RSSObject):
             link = li.find('div', attrs={'class': 'text'}).find('small').find('a')['href']
             if guid in old_guids:
                 continue
-            content = li.find('div', attrs={'class': 'text'}).find('p')
+            content = li.find('div', attrs={'class': 'text'})
+            content.find('small').clear()
+            content.find('span', attrs={'class': 'righttext'}).clear()
+            content.find('div', attrs={'class': 'vote'}).clear()
             for img in content.find_all('img'):
                 if img.name == 'img':
                     if img.has_attr('org_src'):
